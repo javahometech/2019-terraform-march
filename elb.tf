@@ -11,6 +11,14 @@ resource "aws_elb" "javahome_elb" {
     lb_protocol       = "http"
   }
 
+  access_logs {
+    bucket        = "${aws_s3_bucket.elb_logs.id}"
+    bucket_prefix = "elb-logs"
+    interval      = 5
+  }
+
+  # arn:aws:s3:::javahome-elb-acceslogs/elb-logs/AWSLogs/962103112291/*
+
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
@@ -18,13 +26,11 @@ resource "aws_elb" "javahome_elb" {
     target              = "HTTP:80/index.html"
     interval            = 30
   }
-
   instances                   = ["${aws_instance.web_servers.*.id}"]
   cross_zone_load_balancing   = true
   idle_timeout                = 60
   connection_draining         = true
   connection_draining_timeout = 60
-
   tags = {
     Name = "javahome-terraform-elb"
   }

@@ -7,6 +7,10 @@ variable "app_env" {
   default = "dev"
 }
 
+variable "elb_access_logs" {
+  default = "javahome-elb-acceslogs"
+}
+
 variable "vpc_cidr" {
   description = "Enter VPC cidr"
   default     = "173.20.0.0/16"

@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "${var.region}"
-}
-
 # Create VPC using Terraform
 
 resource "aws_vpc" "my_vpc" {
