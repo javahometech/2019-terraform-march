@@ -44,5 +44,10 @@ variable "web_servers_count" {
 }
 
 variable "ec2_ami" {
-  default = "ami-0ad42f4f66f6c1cc9"
+  type = "map"
+
+  default = {
+    ap-south-1 = "ami-0ad42f4f66f6c1cc9"
+    us-east-1  = "ami-0080e4c5bc078760e"
+  }
 }

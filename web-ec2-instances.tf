@@ -1,8 +1,15 @@
+locals {
+  web_sub_ids = "${aws_subnet.webservers.*.id}"
+  azs         = "${data.aws_availability_zones.azs.names}"
+}
+
 resource "aws_instance" "web_servers" {
-  count                       = "${var.web_servers_count}"
-  ami                         = "${var.ec2_ami}"
+  count = "${var.web_servers_count}"
+
+  # ami                         = "${lookup(var.ec2_ami,var.region)}"
+  ami                         = "${var.ec2_ami[var.region]}"
   instance_type               = "${var.instance_type}"
-  subnet_id                   = "${aws_subnet.webservers.*.id[count.index]}"
+  subnet_id                   = "${local.web_sub_ids[count.index]}"
   associate_public_ip_address = "true"
   vpc_security_group_ids      = ["${aws_security_group.web_sg.id}"]
   iam_instance_profile        = "${aws_iam_instance_profile.ec2_s3_profile_new.name}"

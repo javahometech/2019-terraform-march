@@ -12,7 +12,7 @@ resource "aws_subnet" "webservers" {
   count             = "${var.web_sub_count}"
   vpc_id            = "${aws_vpc.my_vpc.id}"
   cidr_block        = "${var.web_cidrs[count.index]}"
-  availability_zone = "${data.aws_availability_zones.azs.names[count.index]}"
+  availability_zone = "${local.azs[count.index]}"
 
   tags {
     Name = "Web-${count.index + 1}"
@@ -46,6 +46,6 @@ resource "aws_route_table" "web" {
 
 resource "aws_route_table_association" "web" {
   count          = "${var.web_sub_count}"
-  subnet_id      = "${aws_subnet.webservers.*.id[count.index]}"
+  subnet_id      = "${local.web_sub_ids[count.index]}"
   route_table_id = "${aws_route_table.web.id}"
 }

@@ -1,6 +1,16 @@
+locals {
+  elb_count = "${terraform.workspace == "prod" ? 1 : 0}"
+  elb_name  = "javahome-elb-${terraform.workspace}"
+}
+
+output "elb_count" {
+  value = "${local.elb_count}"
+}
+
 # Create a new load balancer
 resource "aws_elb" "javahome_elb" {
-  name            = "javahome-elb"
+  count           = "${local.elb_count}"
+  name            = "${local.elb_name}"
   subnets         = ["${aws_subnet.webservers.*.id}"]
   security_groups = ["${aws_security_group.elb.id}"]
 
